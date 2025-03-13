@@ -79,6 +79,38 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     
     return true; // 保持消息通道开放用于异步响应
   }
+
+  // 处理获取活跃的localhost:8081标签页的请求
+  if (request.action === 'getActiveLocalhostTab') {
+    chrome.tabs.query({ url: 'http://localhost:8081/*' }, function(tabs) {
+      if (tabs.length === 0) {
+        sendResponse({ success: false, error: '未找到编辑器页面' });
+        return;
+      }
+
+      // 按照最后访问时间排序，获取最近访问的标签页
+      chrome.tabs.query({ active: true, lastFocusedWindow: true }, function(activeTabs) {
+        const activeTab = activeTabs[0];
+        // 首先检查当前活跃的标签页是否是localhost:8081
+        const matchingTab = tabs.find(tab => tab.id === activeTab?.id) || 
+                          // 如果当前活跃标签页不是localhost:8081，则使用最后一个localhost:8081标签页
+                          tabs[tabs.length - 1];
+        
+        if (matchingTab) {
+          sendResponse({ 
+            success: true, 
+            targetUrl: matchingTab.url 
+          });
+        } else {
+          sendResponse({ 
+            success: false, 
+            error: '未找到活跃的编辑器页面' 
+          });
+        }
+      });
+    });
+    return true; // 保持消息通道开放用于异步响应
+  }
 });
 
 // 发送消息到 Vditor 标签页

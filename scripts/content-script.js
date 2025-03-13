@@ -239,26 +239,42 @@ document.head.appendChild(style);
 function sendContentToVditor(content) {
   try {
     const currentUrl = window.location.href;
-    // const content5 = content.substring(0, 10) + (content.length > 10 ? '...' : '');
     const contentWithSource = `${content}\n\n$\\color{blue}{From}$ [${currentUrl}](${currentUrl})\n\n`;
-    // 通过 chrome.runtime.sendMessage 发送消息到 background script
+    
+    // 首先获取活跃的localhost:8081标签页URL
     chrome.runtime.sendMessage({
-      action: 'sendToVditor',
-      content: contentWithSource,
-      targetUrl: 'http://localhost:8081/workerspace?wid=38a8c679-8c2f-425c-baa0-2ee29810183f'
+      action: 'getActiveLocalhostTab'
     }, function(response) {
       if (chrome.runtime.lastError) {
-        console.error('发送消息到 background 失败:', chrome.runtime.lastError);
-        showErrorNotification('发送失败: ' + chrome.runtime.lastError.message);
+        console.error('获取活跃标签页失败:', chrome.runtime.lastError);
+        showErrorNotification('获取目标编辑器失败: ' + chrome.runtime.lastError.message);
         return;
       }
-      
-      if (response && response.success) {
-        console.log('内容已发送到 Vditor');
-      } else {
-        console.error('发送到 Vditor 失败:', response ? response.error : '未知错误');
-        showErrorNotification('发送失败: ' + (response ? response.error : '未知错误'));
+
+      if (!response || !response.targetUrl) {
+        showErrorNotification('未找到活跃的编辑器页面，请确保编辑器已打开');
+        return;
       }
+
+      // 发送内容到background script
+      chrome.runtime.sendMessage({
+        action: 'sendToVditor',
+        content: contentWithSource,
+        targetUrl: response.targetUrl
+      }, function(response) {
+        if (chrome.runtime.lastError) {
+          console.error('发送消息到 background 失败:', chrome.runtime.lastError);
+          showErrorNotification('发送失败: ' + chrome.runtime.lastError.message);
+          return;
+        }
+        
+        if (response && response.success) {
+          console.log('内容已发送到 Vditor');
+        } else {
+          console.error('发送到 Vditor 失败:', response ? response.error : '未知错误');
+          showErrorNotification('发送失败: ' + (response ? response.error : '未知错误'));
+        }
+      });
     });
     
     return true;
