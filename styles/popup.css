@@ -1,0 +1,75 @@
+body {
+  width: 300px;
+  padding: 15px;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+#toggleSelection {
+  background: #4CAF50;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+  margin: 10px 0;
+}
+
+#toggleSelection:hover {
+  background: #45a049;
+}
+
+#status {
+  color: #2196F3;
+  font-weight: bold;
+}
+
+#selectedContent {
+  margin-top: 15px;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+/* 新增内容项样式 */
+.content-item {
+  padding: 10px;
+  margin: 8px 0;
+  background: #f8f9fa;
+  border-radius: 4px;
+  border-left: 3px solid #4CAF50;
+}
+
+.content-text {
+  color: #333;
+  line-height: 1.5;
+  word-break: break-word;
+}
+
+.content-time {
+  color: #666;
+  font-size: 0.8em;
+  margin-top: 5px;
+}
+
+.delete-btn {
+  background: none;
+  border: none;
+  color: #ff4444;
+  font-size: 1.2em;
+  cursor: pointer;
+  padding: 0 5px;
+  transition: color 0.2s;
+}
+
+.delete-btn:hover {
+  color: #cc0000;
+}
+
+.content-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 8px;
+}
