@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>划词工具</title>
+  <style>
+    body {
+      width: 300px;
+      padding: 15px;
+      font-family: system-ui, -apple-system, sans-serif;
+      margin: 0;
+    }
+    
+    h2 {
+      margin-top: 0;
+      margin-bottom: 15px;
+      font-size: 16px;
+      color: #333;
+      padding-bottom: 10px;
+      border-bottom: 1px solid #eee;
+    }
+    
+    #selectedContent {
+      max-height: 400px;
+      overflow-y: auto;
+      padding-right: 5px;
+    }
+    
+    #selectedContent::-webkit-scrollbar {
+      width: 6px;
+    }
+    
+    #selectedContent::-webkit-scrollbar-thumb {
+      background-color: #ccc;
+      border-radius: 3px;
+    }
+    
+    .content-entry:hover {
+      background: #f8f8f8;
+    }
+    
+    .delete-btn:hover {
+      background: #ff5555;
+    }
+  </style>
+</head>
+<body>
+  <h2>已保存的内容</h2>
+  <div id="selectedContent"></div>
+  <script src="popup.js"></script>
+</body>
+</html> 
